@@ -59,26 +59,36 @@ class College(models.Model):
     university = models.ForeignKey(University, on_delete=models.CASCADE)
     __str__ = lambda self: self.name
 
+class Department(models.Model):
+    name = models.CharField(max_length=100)
+    abbreviation = models.CharField(max_length=5)
+    college = models.ForeignKey(College, on_delete=models.CASCADE)
+    __str__ = lambda self: self.name
+
 class EducationStat(models.Model):
     education = models.ForeignKey(University, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     value = models.CharField(max_length=100, blank=True)
+    __str__ = lambda self: self.name
 
 class DegreeType(models.Model):
     name = models.CharField(max_length=20)
-    abbreviation = models.CharField(max_length=5)
+    abbreviation = models.CharField(max_length=5, blank=True)
+    __str__ = lambda self: self.name
 
 class Degree(models.Model):
     name = models.CharField(max_length=50)
-    emphasis = models.CharField(max_length=50)
+    emphasis = models.CharField(max_length=50, blank=True)
     type = models.ForeignKey(DegreeType, on_delete=models.RESTRICT)
-    college = models.ForeignKey(College, on_delete=models.CASCADE)
-    __str__ = lambda self: self.name
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    __str__ = lambda self: f'{self.type.name} {self.name}'
 
 class Course(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True)
-    degree = models.ForeignKey(Degree, on_delete=models.RESTRICT)
+    number = models.IntegerField(null=True)
+    department = models.ForeignKey(Department, on_delete=models.RESTRICT)
+    __str__ = lambda self: f'{self.department.abbreviation} {self.number}'
 
 class Certification(models.Model):
     name = models.CharField(max_length=100)
