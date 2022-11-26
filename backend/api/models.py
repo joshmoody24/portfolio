@@ -4,6 +4,8 @@ from django.db import models
 class ProjectCategory(models.Model):
     name = models.CharField(max_length=100)
     __str__ = lambda self: self.name
+    class Meta:
+        verbose_name_plural = "Project categories"
 
 class Project(models.Model):
     name = models.CharField(max_length=100)
@@ -17,10 +19,12 @@ class Project(models.Model):
 class SkillCategory(models.Model):
     name = models.CharField(max_length=100)
     __str__ = lambda self: self.name
+    class Meta:
+        verbose_name_plural = "Skill categories"
 
 class Skill(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     category = models.ForeignKey(SkillCategory, on_delete=models.RESTRICT)
     order = models.IntegerField()
     featured = models.BooleanField()
@@ -29,6 +33,8 @@ class Skill(models.Model):
 class AchievementCategory(models.Model):
     name = models.CharField(max_length=100)
     __str__ = lambda self: self.name
+    class Meta:
+        verbose_name_plural = "Achievement categories"
 
 class Achievement(models.Model):
     name = models.CharField(max_length=100)
@@ -41,3 +47,51 @@ class Achievement(models.Model):
 class Setting(models.Model):
     key = models.CharField(max_length=50)
     value = models.CharField(max_length=100)
+
+class University(models.Model):
+    name = models.CharField(max_length=100)
+    __str__ = lambda self: self.name
+    class Meta:
+        verbose_name_plural = "Universities"
+
+class College(models.Model):
+    name = models.CharField(max_length=100)
+    university = models.ForeignKey(University, on_delete=models.CASCADE)
+    __str__ = lambda self: self.name
+
+class EducationStat(models.Model):
+    education = models.ForeignKey(University, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    value = models.CharField(max_length=100, blank=True)
+
+class DegreeType(models.Model):
+    name = models.CharField(max_length=20)
+    abbreviation = models.CharField(max_length=5)
+
+class Degree(models.Model):
+    name = models.CharField(max_length=50)
+    emphasis = models.CharField(max_length=50)
+    type = models.ForeignKey(DegreeType, on_delete=models.RESTRICT)
+    college = models.ForeignKey(College, on_delete=models.CASCADE)
+    __str__ = lambda self: self.name
+
+class Course(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField(blank=True)
+    degree = models.ForeignKey(Degree, on_delete=models.RESTRICT)
+
+class Certification(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    link = models.URLField(blank=True)
+    __str__ = lambda self: self.name
+
+class Employment(models.Model):
+    job_title = models.CharField(max_length=100)
+    employer = models.CharField(max_length=100)
+    __str__ = lambda self: f'{self.job_title} at {self.employer}'
+
+class EmploymentDetail(models.Model):
+    employment = models.ForeignKey(Employment, on_delete=models.CASCADE)
+    description = models.TextField()
+    __str__ = lambda self: self.description

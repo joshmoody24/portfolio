@@ -16,7 +16,7 @@ export default function Navbar() {
                 {/* Website Logo */}
                 <div className="mr-auto">
                     <a href="#" className="flex items-center py-4 px-2">
-                        <img src="favicon.ico" alt="Logo" className="h-8 w-8 mr-2" />
+                        <img src="favicon.ico" alt="Logo" className="h-8 w-8" />
                     </a>
                 </div>
                 {/* primary navbar menu */}
