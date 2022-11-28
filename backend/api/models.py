@@ -99,6 +99,9 @@ class Certification(models.Model):
 class Employment(models.Model):
     job_title = models.CharField(max_length=100)
     employer = models.CharField(max_length=100)
+    start_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
+    location = models.CharField(max_length=50)
     __str__ = lambda self: f'{self.job_title} at {self.employer}'
 
 class EmploymentDetail(models.Model):
